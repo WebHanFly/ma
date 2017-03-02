@@ -59,7 +59,7 @@ a {text-decoration: none;color: #000;}
 					<div class="view"  @dblclick="edtortodo(item)">
 						<input type="checkbox" class="toggle" v-model="item.ischecked">
 						<label>{{item.title}}</label>
-						<button class="destroy" @click="deletetodo"></button>
+						<button class="destroy" @click="deletetodo(item)"></button>
 					</div>
 					<input v-focus="edtorTodos === item" 
 					       type="text" 

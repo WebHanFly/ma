@@ -1,12 +1,12 @@
 var list = [
-    {
-    	title:'吃饭睡觉',
-    	ischecked:false
-    },
-     {
-     	title:'打豆豆',
-     	ischecked:true
-     }
+    // {
+    // 	title:'吃饭睡觉',
+    // 	ischecked:false
+    // },
+    //  {
+    //  	title:'打豆豆',
+    //  	ischecked:true
+    //  }
 ];
 new Vue({
     el:".main",
@@ -14,17 +14,15 @@ new Vue({
     	list:list,
     	todo:"",
     	edtorTodos:"",
-        beforetitle:""
+      beforetitle:""
     },
     methods:{
-    	addToDo:function(ev){
-     
-         	this.list.push({
-         		title:this.todo,
-         		ischecked:false,
-         		
-         	});
-          this.todo = '';
+    	addToDo:function(){
+          this.list.push({
+              title:this.todo,
+           		ischecked:false,
+           	});
+         this.todo = '';
     	},
     	deletetodo:function(todo){
     		var index = this.list.indexOf(todo);
@@ -32,8 +30,9 @@ new Vue({
     	},
     	edtortodo:function(todo){
     		this.edtorTodos = todo;
+
             //编辑这条任务的时候记录下来，方便在取消编辑是回到原来的值
-            this.beforetitle = todo.title;
+        this.beforetitle = todo.title;
     	},
         edtortodoed:function(todo){
             this.edtorTodos = '';
