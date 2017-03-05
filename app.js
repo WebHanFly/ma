@@ -1,4 +1,15 @@
-var list = [
+//存取我们的数据
+var store = {
+    save(key,value){
+        localStorage.setItem(key,JSON.stringify(value))
+    },
+    fetch(key){
+        return JSON.parse(localStorage.getItem(key))||[];
+    }
+}
+
+
+/*var list = [
     // {
     // 	title:'吃饭睡觉',
     // 	ischecked:false
@@ -7,14 +18,43 @@ var list = [
     //  	title:'打豆豆',
     //  	ischecked:true
     //  }
-];
-new Vue({
+];*/
+var list = store.fetch('xiaoma');
+var filter = {
+                    all:function(list){
+                        return list;
+                    },
+                    finished:function(list){
+                        return list.filter(function(item){
+                            return item.ischecked;
+                        });
+                    },
+                    unfinished:function(list){
+                          return list.filter(function(item){
+                            return !item.ischecked;
+                        });
+                    }
+                } //filter结束
+                
+var vm = new Vue({
     el:".main",
+    watch:{
+        // list:function(){
+        //     store.save('xiaoma',this.list); 
+        // }
+           list:{
+            handler:function(){
+                store.save('xiaoma',this.list); 
+                    },
+                deep:true
+           }
+    },
     data:{
     	list:list,
     	todo:"",
     	edtorTodos:"",
-      beforetitle:""
+      beforetitle:"",
+      visibility:"all"//通过这个属性值的变化对数据进行筛选
     },
     methods:{
     	addToDo:function(){
@@ -23,6 +63,7 @@ new Vue({
            		ischecked:false,
            	});
          this.todo = '';
+
     	},
     	deletetodo:function(todo){
     		var index = this.list.indexOf(todo);
@@ -57,7 +98,33 @@ new Vue({
                return this.list.filter(function(item){
                    return !item.ischecked
                     }).length
-            }
-        }
+            },
+            filterdList:function(){
+                //过滤的时候有三种情况。
+                return filter[this.visibility]?filter[this.visibility](list):list;
+            } //filterdList
+        }//computed
     
 });
+function watchhashchange(){
+
+    var hash = window.location.hash.slice(1);
+    vm.visibility = hash;
+};
+ watchhashchange();
+window.addEventListener('hashchange', watchhashchange);
+window.onload = function(){
+    var btnLi = document.getElementById("btn1");
+    var lia = btnLi.getElementsByTagName('a');
+    for (var i = 0;i<lia.length;i++){
+        (function(a){
+           lia[a].onclick = function(){
+            for (var i = 0;i<lia.length;i++){
+                 lia[i].setAttribute('class','');
+            }
+            this.setAttribute('class','active');
+            }
+        })(i);
+          
+    }
+}
